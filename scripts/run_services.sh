@@ -89,7 +89,7 @@ start_comfyui() {
         return 1
     fi
 
-    local launch_args=(--listen 0.0.0.0 --port "$COMFYUI_PORT" --preview-method auto)
+    local launch_args=(--listen 127.0.0.1 --port "$COMFYUI_PORT" --preview-method auto)
     case "$SAGE_ATTENTION" in
         true) launch_args+=(--use-sage-attention) ;;
         false) ;;
