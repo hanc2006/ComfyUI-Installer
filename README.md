@@ -46,6 +46,28 @@ remote file path, or destination under `ComfyUI/models`. Set `HF_TOKEN` in
 into the ComfyUI virtual environment automatically if needed. Existing non-empty
 model files are skipped.
 
+Install File Browser to manage `/workspace`:
+
+```sh
+./scripts/install_filebrowser.sh
+```
+
+The script prints the generated `admin` credentials and saves them in plaintext
+at `/workspace/filebrowser-credentials.txt` (owner-only permissions). Protect
+that file and console output. The credentials file is not updated if the
+password is changed later. The installer refuses to overwrite existing File
+Browser files. Start File Browser with:
+
+```sh
+/workspace/.filebrowser/filebrowser -d /workspace/.filebrowser/filebrowser.db
+```
+
+It listens on `127.0.0.1:8080`; use an SSH tunnel to access it remotely.
+The original File Browser project is archived and has unresolved security
+issues. Do not expose it directly to the internet; use a reverse proxy with
+TLS and separate authentication if remote exposure is required. Run it as an
+unprivileged user and keep command execution disabled.
+
 Start ComfyUI:
 
 ```sh
