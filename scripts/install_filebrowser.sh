@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/config.sh"
+
 workspace="/workspace"
-state_dir="$workspace/.filebrowser"
-credentials="$workspace/filebrowser-credentials.txt"
+data_home="${XDG_DATA_HOME:-${HOME:?HOME must be set}/.local/share}"
+state_dir="$data_home/filebrowser"
+credentials="$state_dir/credentials.txt"
 binary="$state_dir/filebrowser"
 database="$state_dir/filebrowser.db"
 version="2.63.23"
@@ -32,7 +36,6 @@ fi
 mkdir -p "$state_dir"
 exec 9>"$state_dir/setup.lock"
 flock 9
-chmod 700 "$state_dir"
 
 if [ -e "$database" ] || [ -L "$database" ] || [ -e "$credentials" ] || [ -L "$credentials" ] \
     || [ -e "$binary" ] || [ -L "$binary" ]; then
@@ -41,6 +44,7 @@ if [ -e "$database" ] || [ -L "$database" ] || [ -e "$credentials" ] || [ -L "$c
     exit 1
 fi
 
+chmod 700 "$state_dir"
 temp_dir="$(mktemp -d "$state_dir/setup.XXXXXX")"
 trap 'rm -rf -- "$temp_dir"' EXIT
 
@@ -61,7 +65,7 @@ chmod 700 "$temp_dir/filebrowser"
 
 password="$(python3 -c 'import secrets; print(secrets.token_urlsafe(24))')"
 "$temp_dir/filebrowser" -d "$temp_dir/filebrowser.db" config init \
-    --root "$workspace" --address 127.0.0.1 --port 8080 --disableExec
+    --root "$workspace" --address 0.0.0.0 --port "$FILEBROWSER_PORT" --disableExec
 "$temp_dir/filebrowser" -d "$temp_dir/filebrowser.db" users add admin "$password" --perm.admin
 printf 'admin:%s\n' "$password" > "$temp_dir/credentials"
 
@@ -73,5 +77,4 @@ chmod 600 "$database" "$credentials"
 printf '\nFile Browser credentials (also saved in %s):\n' "$credentials"
 cat "$credentials"
 printf 'Start File Browser: %s -d %s\n' "$binary" "$database"
-printf 'File Browser listens on 127.0.0.1:8080 and serves %s.\n' "$workspace"
-printf 'Do not expose it directly to the internet; use an authenticated TLS proxy.\n'
+printf 'File Browser listens on 0.0.0.0:%s and serves %s.\n' "$FILEBROWSER_PORT" "$workspace"

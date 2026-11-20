@@ -14,7 +14,7 @@ git clone https://github.com/hanc2006/ComfyUI-Installer.git
 cd ComfyUI-Installer
 ```
 
-Edit the static settings at the top of `scripts/config.sh` if needed. The default configuration uses port `8188` and keeps all files in the cloned repository directory.
+Edit the static settings at the top of `scripts/config.sh` if needed. The default configuration uses port `8188` and keeps all files in the cloned repository directory. Set `FILEBROWSER_PORT` there to configure File Browser's listening port.
 
 Install ComfyUI:
 
@@ -53,20 +53,21 @@ Install File Browser to manage `/workspace`:
 ```
 
 The script prints the generated `admin` credentials and saves them in plaintext
-at `/workspace/filebrowser-credentials.txt` (owner-only permissions). Protect
-that file and console output. The credentials file is not updated if the
-password is changed later. The installer refuses to overwrite existing File
-Browser files. Start File Browser with:
+under `$HOME/.local/share/filebrowser/credentials.txt` (owner-only permissions,
+or under `$XDG_DATA_HOME/filebrowser/credentials.txt` when `XDG_DATA_HOME` is
+set). Protect that file and console output. The credentials file is not updated
+if the password is changed later. The installer refuses to overwrite existing
+File Browser files. Start File Browser with:
 
 ```sh
-/workspace/.filebrowser/filebrowser -d /workspace/.filebrowser/filebrowser.db
+data_home="${XDG_DATA_HOME:-$HOME/.local/share}"
+"$data_home/filebrowser/filebrowser" -d "$data_home/filebrowser/filebrowser.db"
 ```
 
-It listens on `127.0.0.1:8080`; use an SSH tunnel to access it remotely.
-The original File Browser project is archived and has unresolved security
-issues. Do not expose it directly to the internet; use a reverse proxy with
-TLS and separate authentication if remote exposure is required. Run it as an
-unprivileged user and keep command execution disabled.
+It listens on `0.0.0.0` on the configured `FILEBROWSER_PORT` (default `8080`)
+and serves `/workspace`. The original File Browser project is archived and has
+unresolved security issues; restrict network access to trusted clients. Run it
+as an unprivileged user and keep command execution disabled.
 
 Start ComfyUI:
 
