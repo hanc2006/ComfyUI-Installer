@@ -35,6 +35,7 @@ repositories=(
     "https://github.com/FloyoAI/LTX2EasyPrompt-LD"
     "https://github.com/princepainter/ComfyUI-PainterQwenImageEdit"
     "https://github.com/1038lab/ComfyUI-RMBG"
+    "https://github.com/liusida/ComfyUI-Login"
 )
 
 if ! command -v git >/dev/null 2>&1; then
