@@ -34,6 +34,18 @@ if present, is installed into the ComfyUI virtual environment on every run.
 Some nodes may require additional setup or dependencies; consult their documentation.
 Restart ComfyUI after installing nodes.
 
+Download the models listed in `scripts/download_models.sh`:
+
+```sh
+./scripts/download_models.sh
+```
+
+Edit the `MODELS` list in the script to change the Hugging Face repository,
+remote file path, or destination under `ComfyUI/models`. Set `HF_TOKEN` in
+`scripts/config.sh` for gated repositories; the Hugging Face CLI is installed
+into the ComfyUI virtual environment automatically if needed. Existing non-empty
+model files are skipped.
+
 Start ComfyUI:
 
 ```sh
