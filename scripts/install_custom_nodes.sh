@@ -5,6 +5,7 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
 
 # Add or remove repository URLs here.
+# https://www.floyo.ai/all-comfyui-nodes
 repositories=(
     "https://github.com/Lyonir/ComfyUI-Lyonir-Studio"
     "https://github.com/numz/ComfyUI-SeedVR2_VideoUpscaler"
@@ -25,6 +26,14 @@ repositories=(
     "https://github.com/Madiator2011Work/ComfyUI-RunpodDirect"
     "https://github.com/eniewold/ComfyUI-Subworkflow"
     "https://github.com/BennyDaBall930/comfyui_hyperflow_int8_nodes"
+    "https://github.com/Extraltodeus/Skimmed_CFG"
+    "https://github.com/ussoewwin/ComfyUI-QwenImageLoraLoader"
+    "https://github.com/tritant/ComfyUI_Custom_Switch"
+    "https://github.com/uczensokratesa/ComfyUI-RTX-Video-Suite"
+    "https://github.com/lrzjason/ComfyUI-EditUtils"
+    "https://github.com/StartHua/Comfyui_joytag"
+    "https://github.com/FloyoAI/LTX2EasyPrompt-LD"
+    "https://github.com/princepainter/ComfyUI-PainterQwenImageEdit"
 )
 
 if ! command -v git >/dev/null 2>&1; then
