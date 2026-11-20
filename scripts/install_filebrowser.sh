@@ -25,7 +25,13 @@ case "$(uname -m)" in
 esac
 
 umask 077
+if ! command -v flock >/dev/null 2>&1; then
+    printf '[!] flock is required.\n' >&2
+    exit 1
+fi
 mkdir -p "$state_dir"
+exec 9>"$state_dir/setup.lock"
+flock 9
 chmod 700 "$state_dir"
 
 if [ -e "$database" ] || [ -L "$database" ] || [ -e "$credentials" ] || [ -L "$credentials" ] \
