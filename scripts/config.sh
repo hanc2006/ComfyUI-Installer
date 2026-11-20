@@ -4,5 +4,5 @@
 INSTALL_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 VENV_DIR="$INSTALL_DIR/venv"
 COMFYUI_DIR="$INSTALL_DIR/ComfyUI"
-GPU_TYPE="nvidia" # nvidia, amd, cpu, or auto
+SAGE_ATTENTION=true # Set to false to use ComfyUI's default attention.
 COMFYUI_PORT=8188

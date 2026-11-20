@@ -4,14 +4,12 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/scripts/config.sh"
 
-install_args=()
-case "$GPU_TYPE" in
-    nvidia) install_args+=(--nvidia) ;;
-    amd) install_args+=(--amd) ;;
-    cpu) install_args+=(--cpu) ;;
-    auto) ;;
+install_args=(--nvidia)
+
+case "$SAGE_ATTENTION" in
+    true|false) ;;
     *)
-        printf '[!] GPU_TYPE must be nvidia, amd, cpu, or auto (got: %s).\n' "$GPU_TYPE" >&2
+        printf '[!] SAGE_ATTENTION must be true or false (got: %s).\n' "$SAGE_ATTENTION" >&2
         exit 1
         ;;
 esac
@@ -34,6 +32,14 @@ fi
     --skip-prompt \
     install \
     "${install_args[@]}"
+
+if [ "$SAGE_ATTENTION" = true ]; then
+    printf '[*] Building SageAttention for the NVIDIA GPU.\n'
+    "$VENV_DIR/bin/python" -m pip install "setuptools>=62,<75" "wheel>=0.38,<0.44" "packaging>=21,<24" ninja "triton>=3.0.0"
+    "$VENV_DIR/bin/python" -m pip install --no-build-isolation --no-deps --force-reinstall --no-cache-dir \
+        'git+https://github.com/thu-ml/SageAttention.git@eb615cf6cf4d221338033340ee2de1c37fbdba4a'
+    "$VENV_DIR/bin/python" -c 'from sageattention import sageattn, _qattn_sm80'
+fi
 
 printf '\nComfyUI installation complete.\n'
 printf 'Start it with: %s/scripts/run_comfyui.sh\n' "$INSTALL_DIR"

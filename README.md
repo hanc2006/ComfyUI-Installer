@@ -2,7 +2,7 @@
 
 Install and run ComfyUI on a Linux server or GPU pod without a desktop environment, interactive prompts, or systemd.
 
-Requires Git, Python 3, and Python's `venv` and `pip` modules. GPU use also requires compatible drivers.
+Requires an NVIDIA GPU with compatible drivers, Git, Python 3, and Python's `venv` and `pip` modules.
 
 ## RunPod setup
 
@@ -14,7 +14,7 @@ git clone https://github.com/hanc2006/ComfyUI-Installer.git
 cd ComfyUI-Installer
 ```
 
-Edit the static settings at the top of `scripts/config.sh` if needed. The default configuration uses NVIDIA, port `8188`, and keeps all files in the cloned repository directory.
+Edit the static settings at the top of `scripts/config.sh` if needed. The default configuration uses port `8188` and keeps all files in the cloned repository directory.
 
 Install ComfyUI:
 
@@ -44,9 +44,18 @@ Expose port `8188` in the pod settings to access the web interface. Keep the pro
 
 ComfyUI listens on all network interfaces. Protect access to the exposed port; do not make it publicly accessible without authentication.
 
-Set `GPU_TYPE` in `scripts/config.sh` to `amd`, `cpu`, or `auto` to change the installation target. The `cpu` setting also starts ComfyUI in CPU mode.
+The installer builds SageAttention 2.2.0 in the
+ComfyUI environment and the launcher enables it with `--use-sage-attention`.
+This requires a supported NVIDIA GPU (compute capability 8.0, 8.6, 8.9, 9.0,
+or 12.0), a C++ build toolchain, and the CUDA toolkit with `nvcc` (not just the
+driver). CUDA 12.0 or newer is required for Ampere, 12.4 for Ada, 12.3 for
+Hopper, and 12.8 for Blackwell. The toolkit should match PyTorch's CUDA
+version. See the [SageAttention installation instructions](https://github.com/thu-ml/SageAttention/tree/v2.2.0#installation).
+Set `SAGE_ATTENTION=false` before installing or launching to use ComfyUI's
+default attention instead. Changing the setting to `true` requires rerunning
+`./install.sh`.
 
-Running `./install.sh` again restores dependencies for an existing ComfyUI installation. To update ComfyUI itself, run:
+Running `./install.sh` again restores dependencies for an existing ComfyUI installation and rebuilds SageAttention when enabled. To update ComfyUI itself, run:
 
 ```sh
 source venv/bin/activate

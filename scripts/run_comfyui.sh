@@ -18,8 +18,13 @@ source "$VENV_DIR/bin/activate"
 cd "$COMFYUI_DIR"
 
 launch_args=(--listen 0.0.0.0 --port "$COMFYUI_PORT" --preview-method auto)
-if [ "$GPU_TYPE" = cpu ]; then
-    launch_args+=(--cpu)
-fi
+case "$SAGE_ATTENTION" in
+    true) launch_args+=(--use-sage-attention) ;;
+    false) ;;
+    *)
+        printf '[!] SAGE_ATTENTION must be true or false (got: %s).\n' "$SAGE_ATTENTION" >&2
+        exit 1
+        ;;
+esac
 
 exec comfy --workspace="$COMFYUI_DIR" launch -- "${launch_args[@]}"
