@@ -42,5 +42,5 @@ if [ "$SAGE_ATTENTION" = true ]; then
 fi
 
 printf '\nComfyUI installation complete.\n'
-printf 'Start it with: %s/scripts/run_comfyui.sh\n' "$INSTALL_DIR"
+printf 'Start services with: %s/scripts/run_services.sh\n' "$INSTALL_DIR"
 printf 'Expose port %s in your pod to access the web interface.\n' "$COMFYUI_PORT"

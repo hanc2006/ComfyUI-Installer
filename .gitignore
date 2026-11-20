@@ -9,5 +9,6 @@ scripts/run_cpu.sh
 scripts/run_gpu.sh
 backup
 ComfyUI-Installer.code-workspace
+.run_services/
 scripts/.settings
 scripts/linker.sh

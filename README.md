@@ -57,25 +57,25 @@ under `$HOME/.local/share/filebrowser/credentials.txt` (owner-only permissions,
 or under `$XDG_DATA_HOME/filebrowser/credentials.txt` when `XDG_DATA_HOME` is
 set). Protect that file and console output. The credentials file is not updated
 if the password is changed later. The installer refuses to overwrite existing
-File Browser files. Start File Browser with:
+File Browser files.
+
+`run_services.sh` checks both services and starts any that are not running. It
+can also restart one service:
 
 ```sh
-data_home="${XDG_DATA_HOME:-$HOME/.local/share}"
-"$data_home/filebrowser/filebrowser" -d "$data_home/filebrowser/filebrowser.db"
+./scripts/run_services.sh
+./scripts/run_services.sh comfyui
+./scripts/run_services.sh filebrowser
 ```
 
-It listens on `0.0.0.0` on the configured `FILEBROWSER_PORT` (default `8080`)
-and serves `/workspace`. The original File Browser project is archived and has
-unresolved security issues; restrict network access to trusted clients. Run it
-as an unprivileged user and keep command execution disabled.
+File Browser listens on `0.0.0.0` on the configured `FILEBROWSER_PORT`
+(default `8080`) and serves `/workspace`. The original File Browser project is
+archived and has unresolved security issues; restrict network access to trusted
+clients. Run it as an unprivileged user and keep command execution disabled.
 
-Start ComfyUI:
-
-```sh
-./scripts/run_comfyui.sh
-```
-
-Expose port `8188` in the pod settings to access the web interface. Keep the process running in the terminal, or configure the pod's startup command to run `./scripts/run_comfyui.sh`.
+Expose port `8188` in the pod settings to access ComfyUI. Configure the pod's
+startup command to run `./scripts/run_services.sh`; service output is written to
+`.run_services/comfyui.log` and `.run_services/filebrowser.log`.
 
 ComfyUI listens on all network interfaces. Protect access to the exposed port; do not make it publicly accessible without authentication.
 
