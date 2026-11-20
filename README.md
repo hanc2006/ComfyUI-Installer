@@ -22,6 +22,18 @@ Install ComfyUI:
 ./install.sh
 ```
 
+Install the included custom nodes:
+
+```sh
+./scripts/install_custom_nodes.sh
+```
+
+Edit the repository URL list in the script to change which nodes are installed.
+Existing node directories are kept without updating them; their `requirements.txt`,
+if present, is installed into the ComfyUI virtual environment on every run.
+Some nodes may require additional setup or dependencies; consult their documentation.
+Restart ComfyUI after installing nodes.
+
 Start ComfyUI:
 
 ```sh
